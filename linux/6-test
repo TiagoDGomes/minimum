@@ -1,0 +1,8 @@
+#!/bin/sh
+
+
+########## Test ##########
+
+qemu-system-x86_64 boot.fat
+
+

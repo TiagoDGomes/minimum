@@ -1,0 +1,24 @@
+#!/bin/sh
+
+########## Build kernel ##############
+
+
+mkdir -p src
+
+cd src
+
+git clone --depth 1 https://github.com/torvalds/linux.git
+
+cd linux
+
+make menuconfig
+# IPV6_SIT=n
+
+make -j 8 
+
+cp arch/x86/boot/bzImage ../../
+
+cd ../..
+
+ls -lh
+

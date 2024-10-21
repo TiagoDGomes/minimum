@@ -1,0 +1,22 @@
+#!/bin/sh
+
+########## Create initramfs ##############
+
+
+mkdir -p initramfs
+
+cd initramfs
+
+### Init: ###
+
+cat <<EOF > init
+#!/bin/sh
+
+/bin/sh
+EOF
+
+chmod +x init
+
+cd ..
+
+

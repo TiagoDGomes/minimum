@@ -1,0 +1,14 @@
+#!/bin/sh
+
+### Make initramfs file ###
+
+rm init.cpio
+
+cd initramfs
+
+find . | cpio -o -H newc > ../init.cpio
+
+cd ..
+
+ls -lh
+
