@@ -1,0 +1,31 @@
+#!/bin/sh
+
+#### Upgrading ####
+
+cd initramfs
+
+mkdir -p etc
+mkdir -p proc
+mkdir -p sys
+
+
+cat <<EOF > init
+#!/bin/sh
+
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+echo ""
+echo "###########################################"
+echo "          Welcome to MiniLinux!"
+echo "###########################################"
+uname -a
+echo ""
+/bin/sh
+poweroff -f
+
+EOF
+
+
+cd ..

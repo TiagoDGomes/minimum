@@ -1,0 +1,34 @@
+#!/bin/sh
+
+
+### Networking ###
+
+cd initramfs
+
+mkdir -p usr/sbin/
+cat <<EOF > usr/sbin/start-networking
+#!/bin/sh
+
+cd /sys/class/net/
+
+for i in *
+do 
+  ip link set \$i up
+done
+
+udhcpc -n 2>&1 > /dev/null
+exit 0
+
+EOF
+
+chmod +x usr/sbin/start-networking
+
+mkdir -p usr/share/udhcpc/
+
+curl https://raw.githubusercontent.com/mschlenker/TinyCrossLinux/refs/heads/master/patches/usr-share-udhcpc-default.script -o usr/share/udhcpc/default.script
+
+chmod +x usr/share/udhcpc/default.script
+
+cd ..
+
+
