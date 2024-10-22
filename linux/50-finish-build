@@ -1,10 +1,18 @@
 #!/bin/sh
 
+########## Finish build ##########
+
 cd mini-linux/initramfs
 
 find . | cpio -o -H newc > ../init.cpio
 
 cd ..
+
+mkdir -p boot-mount
+
+umount boot-mount
+
+rm boot.fat
 
 dd if=/dev/zero of=boot.fat bs=1M count=20
 
@@ -14,8 +22,12 @@ syslinux boot.fat
 
 mount -t vfat boot.fat boot-mount
 
-ls -l 
-
-cp syslinux.cfg bzImage init.cpio boot-mount/
+cp bzImage init.cpio syslinux.cfg boot-mount/
 
 umount boot-mount
+
+ls -lh
+
+
+
+

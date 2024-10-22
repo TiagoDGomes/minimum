@@ -5,7 +5,7 @@
 cd mini-linux
 
 cat <<EOF > syslinux.cfg
-DEFAULT /bzImage -initrd=/init.cpio BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
+DEFAULT /bzImage -initrd=/init.cpio loglevel=0 BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
 EOF
 
 cd initramfs
@@ -21,17 +21,21 @@ mount -t proc proc /proc
 mount -t sysfs sysfs /sys
 
 mdev -s
-echo ""
-echo "###########################################"
-echo "          Welcome to MiniLinux!"
-echo "###########################################"
-uname -a
-echo ""
+
 if [ "\$BOOT_SCRIPT" != "" ]; then
     start-networking
     wget "\$BOOT_SCRIPT" -q -O - | /bin/sh
 fi
-/bin/sh
+
+echo ""
+echo "###########################################"
+echo "          Welcome to MiniLinux!"
+echo "###########################################"
+echo ""
+uname -a
+echo ""
+
+/bin/sh +m
 poweroff -f
 
 EOF

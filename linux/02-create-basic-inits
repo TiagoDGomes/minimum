@@ -1,0 +1,25 @@
+#!/bin/sh
+
+########## Create basic syslinux.cfg ##########
+
+cd mini-linux
+
+cat <<EOF > syslinux.cfg
+DEFAULT /bzImage -initrd=/init.cpio 
+EOF
+
+mkdir -p initramfs
+
+cd initramfs
+
+### Init: ###
+
+cat <<EOF > init
+#!/bin/sh
+
+/bin/sh
+EOF
+
+chmod +x init
+
+cd ..
