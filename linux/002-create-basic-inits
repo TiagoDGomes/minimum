@@ -4,22 +4,26 @@
 
 cd mini-linux
 
-cat <<EOF > syslinux.cfg
+
+### syslinux.cfg: ###
+
+mkdir -p boot-prepare
+
+cat <<EOF > boot-prepare/syslinux.cfg
 DEFAULT /bzImage -initrd=/init.cpio 
 EOF
 
+
+### init: ###
+
 mkdir -p initramfs
 
-cd initramfs
-
-### Init: ###
-
-cat <<EOF > init
+cat <<EOF > initramfs/init
 #!/bin/sh
 
 /bin/sh
 EOF
 
-chmod +x init
+chmod +x initramfs/init
 
 cd ..

@@ -2,29 +2,39 @@
 
 ########## Finish build ##########
 
-cd mini-linux/initramfs
+cd mini-linux
 
-find . | cpio -o -H newc > ../init.cpio
+mkdir -p boot-prepare
+
+cp src/linux/arch/x86/boot/bzImage boot-prepare/
+
+cd initramfs
+
+find . | cpio -o -H newc > ../boot-prepare/init.cpio
 
 cd ..
 
-mkdir -p boot-mount
-
-umount boot-mount
+mkdir -p boot-mount-tmp
 
 rm boot.fat
 
-dd if=/dev/zero of=boot.fat bs=1M count=20
+prepsize=$(du boot-prepare | cut -f 1 | tail -1)
+initsize=$(du initramfs | cut -f 1 | tail -1)
+bootsize=$(echo "(($prepsize + $initsize) / 1000) + 1" | bc)
+
+dd if=/dev/zero of=boot.fat bs=1M count=$bootsize
 
 mkfs -t fat boot.fat
 
 syslinux boot.fat
 
-mount -t vfat boot.fat boot-mount
+mount -t vfat boot.fat boot-mount-tmp
 
-cp bzImage init.cpio syslinux.cfg boot-mount/
+cp boot-prepare/* boot-mount-tmp/
 
-umount boot-mount
+umount boot-mount-tmp
+
+rmdir boot-mount-tmp
 
 ls -lh
 

@@ -16,8 +16,6 @@ make menuconfig
 
 make -j 4 
 
-cp arch/x86/boot/bzImage ../../
-
 cd ../..
 
 ls -lh

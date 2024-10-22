@@ -4,8 +4,10 @@
 
 cd mini-linux
 
-cat <<EOF > syslinux.cfg
-DEFAULT /bzImage -initrd=/init.cpio loglevel=0 BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
+mkdir -p boot-prepare
+
+cat <<EOF > boot-prepare/syslinux.cfg
+DEFAULT /bzImage -initrd=/init.cpio loglevel=7 BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
 EOF
 
 cd initramfs
@@ -40,5 +42,6 @@ poweroff -f
 
 EOF
 
+chmod +x init
 
 cd ..
