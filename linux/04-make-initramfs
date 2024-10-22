@@ -2,9 +2,9 @@
 
 ### Make initramfs file ###
 
-rm init.cpio
+rm mini-linux/init.cpio
 
-cd initramfs
+cd mini-linux/initramfs
 
 find . | cpio -o -H newc > ../init.cpio
 

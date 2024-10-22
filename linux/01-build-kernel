@@ -3,9 +3,9 @@
 ########## Build kernel ##############
 
 
-mkdir -p src
+mkdir -p mini-linux/src
 
-cd src
+cd mini-linux/src
 
 git clone --depth 1 https://github.com/torvalds/linux.git
 
@@ -14,7 +14,7 @@ cd linux
 make menuconfig
 # IPV6_SIT=n
 
-make -j 8 
+make -j 4 
 
 cp arch/x86/boot/bzImage ../../
 

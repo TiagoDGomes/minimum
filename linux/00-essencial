@@ -4,15 +4,15 @@
 # Como todos os arquivos gerados vão precisar ser de propriedade de root
 # é melhor já executar tudo como root pra evitar de ter que ficar dando chmod e chown toda hora
 
-sudo su
+
 
 apt update
 
 apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux dosfstools qemu-system-x86
 
-mkdir -p /mini-linux/
+mkdir -p mini-linux
 
-chmod -R ugo+w /mini-linux
+chmod -R ugo+w mini-linux
 
-cd /mini-linux/
+
 

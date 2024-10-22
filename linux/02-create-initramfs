@@ -3,9 +3,9 @@
 ########## Create initramfs ##############
 
 
-mkdir -p initramfs
+mkdir -p mini-linux/initramfs
 
-cd initramfs
+cd mini-linux/initramfs
 
 ### Init: ###
 

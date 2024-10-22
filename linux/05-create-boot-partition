@@ -2,6 +2,8 @@
 
 ########## Boot from disk ##########
 
+cd mini-linux
+
 mkdir -p boot-mount
 
 umount boot-mount
@@ -16,11 +18,11 @@ syslinux boot.fat
 
 mount -t vfat boot.fat boot-mount
 
-cp bzImage init.cpio boot-mount/
-
-cat <<EOF > boot-mount/syslinux.cfg
+cat <<EOF > syslinux.cfg
 DEFAULT /bzImage -initrd=/init.cpio 
 EOF
+
+cp bzImage init.cpio syslinux.cfg boot-mount/
 
 umount boot-mount
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd initramfs
+cd mini-linux/initramfs
 
 find . | cpio -o -H newc > ../init.cpio
 
@@ -14,10 +14,8 @@ syslinux boot.fat
 
 mount -t vfat boot.fat boot-mount
 
-cp bzImage init.cpio boot-mount/
+ls -l 
 
-cat <<EOF > boot-mount/syslinux.cfg
-DEFAULT /bzImage -initrd=/init.cpio 
-EOF
+cp syslinux.cfg bzImage init.cpio boot-mount/
 
 umount boot-mount

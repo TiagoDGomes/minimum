@@ -3,6 +3,8 @@
 
 ########## Test ##########
 
+cd mini-linux
+
 qemu-system-x86_64 boot.fat
 
 

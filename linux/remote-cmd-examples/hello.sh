@@ -1,3 +1,5 @@
 #!/bin/sh
 
-echo "Hello, world! I am a remote command!"
+echo "--------------------------------------"
+echo " Hello, world! I am a remote command!"
+echo "--------------------------------------"

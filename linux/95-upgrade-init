@@ -2,19 +2,24 @@
 
 #### Upgrading ####
 
+cd mini-linux
+
+cat <<EOF > syslinux.cfg
+DEFAULT /bzImage -initrd=/init.cpio BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
+EOF
+
 cd initramfs
 
 mkdir -p etc
 mkdir -p proc
 mkdir -p sys
 
-
 cat <<EOF > init
 #!/bin/sh
 
 mount -t proc proc /proc
 mount -t sysfs sysfs /sys
-echo /sbin/mdev > /proc/sys/kernel/hotplug
+
 mdev -s
 echo ""
 echo "###########################################"
@@ -22,6 +27,10 @@ echo "          Welcome to MiniLinux!"
 echo "###########################################"
 uname -a
 echo ""
+if [ "\$BOOT_SCRIPT" != "" ]; then
+    start-networking
+    wget "\$BOOT_SCRIPT" -q -O - | /bin/sh
+fi
 /bin/sh
 poweroff -f
 

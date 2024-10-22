@@ -3,7 +3,7 @@
 ########## Busybox ##########
 
 
-cd src
+cd mini-linux/src
 
 git clone --depth 1 https://git.busybox.net/busybox
  
