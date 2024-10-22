@@ -15,14 +15,5 @@ make menuconfig
 
 make -j 8
 
-
-make CONFIG_PREFIX=../../initramfs install
-
-cd ../../initramfs
-
-ls -lh
-
-rm linuxrc
-
-cd ..
+cd ../..
 

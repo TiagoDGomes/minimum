@@ -6,11 +6,30 @@ cd mini-linux
 
 mkdir -p boot-prepare
 
+# kernel copy:
+
 cp src/linux/arch/x86/boot/bzImage boot-prepare/
 
-cd initramfs
+
+# busybox install:
+
+cd src/busybox
+
+make CONFIG_STATIC=y CONFIG_PREFIX=../../initramfs install
+
+cd ../../initramfs
+
+ls -lh
+
+rm linuxrc
+
+
+# initramfs:
 
 find . | cpio -o -H newc > ../boot-prepare/init.cpio
+
+
+# boot partition
 
 cd ..
 
