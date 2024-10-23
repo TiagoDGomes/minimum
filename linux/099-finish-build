@@ -4,11 +4,10 @@
 
 cd mini-linux
 
-mkdir -p boot-prepare
 
 # kernel copy:
 
-cp src/linux/arch/x86/boot/bzImage boot-prepare/
+cp src/linux/arch/x86/boot/bzImage boot-partition/
 
 
 # busybox install:
@@ -26,7 +25,7 @@ rm linuxrc
 
 # initramfs:
 
-find . | cpio -o -H newc > ../boot-prepare/init.cpio
+find . | cpio -o -H newc > ../boot-partition/init.cpio
 
 
 # boot partition
@@ -37,7 +36,7 @@ mkdir -p boot-mount-tmp
 
 rm boot.fat
 
-prepsize=$(du boot-prepare | cut -f 1 | tail -1)
+prepsize=$(du boot-partition | cut -f 1 | tail -1)
 initsize=$(du initramfs | cut -f 1 | tail -1)
 bootsize=$(echo "(($prepsize + $initsize) / 1000) + 1" | bc)
 
@@ -49,7 +48,7 @@ syslinux boot.fat
 
 mount -t vfat boot.fat boot-mount-tmp
 
-cp boot-prepare/* boot-mount-tmp/
+cp boot-partition/* boot-mount-tmp/
 
 umount boot-mount-tmp
 

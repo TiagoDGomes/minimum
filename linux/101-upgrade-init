@@ -4,9 +4,7 @@
 
 cd mini-linux
 
-mkdir -p boot-prepare
-
-cat <<EOF > boot-prepare/syslinux.cfg
+cat <<EOF > boot-partition/syslinux.cfg
 DEFAULT /bzImage -initrd=/init.cpio loglevel=7 BOOT_SCRIPT=https://raw.githubusercontent.com/TiagoDGomes/minimum/refs/heads/main/linux/remote-cmd-examples/hello.sh
 EOF
 

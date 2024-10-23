@@ -10,7 +10,7 @@ apt update
 
 apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux dosfstools qemu-system-x86
 
-mkdir -p mini-linux
+mkdir -p mini-linux/{boot-partition,initramfs,src}
 
 chmod -R ugo+w mini-linux
 

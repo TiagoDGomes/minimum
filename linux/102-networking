@@ -6,6 +6,7 @@
 cd mini-linux/initramfs
 
 mkdir -p usr/sbin/
+
 cat <<EOF > usr/sbin/start-networking
 #!/bin/sh
 

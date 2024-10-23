@@ -3,8 +3,6 @@
 ########## Build kernel ##############
 
 
-mkdir -p mini-linux/src
-
 cd mini-linux/src
 
 git clone --depth 1 https://github.com/torvalds/linux.git
