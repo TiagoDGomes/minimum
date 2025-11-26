@@ -98,8 +98,36 @@ FOUND=""
 # Lista todos os block devices (exceto ram, loop, dm)
 BLOCKS=$(ls /dev | grep -E '^(sd|vd|hd|sr)[a-z][0-9]?$|^sr[0-9]$')
 
+wait_for_block() {
+    DEV="$1"
+
+    echo "[INIT] Aguardando $DEV ficar pronto..."
+
+    for i in $(seq 1 20); do
+        # dispositivo existe fisicamente?
+        if [ -b "$DEV" ]; then
+            # tem tamanho válido?
+            SIZE=$(cat /sys/block/$(basename $DEV)/size 2>/dev/null || echo 0)
+            if [ "$SIZE" -gt 0 ]; then                
+                echo "[INIT] $DEV pronto! (size=$SIZE)"
+                return 0
+            fi
+        fi
+        sleep 0.2
+    done
+
+    echo "[INIT] Timeout esperando $DEV"
+    return 1
+}
+
+
 for dev in $BLOCKS; do
     DEVNODE="/dev/$dev"
+
+    if echo "$dev" | grep -qE '^sr[0-9]$'; then
+        # espera sr0 ficar pronto
+        wait_for_block "/dev/$dev"
+    fi
 
     # Se for disco (sda), cria partição padrão (sda1)
     if echo "$dev" | grep -qE '^(sd|vd|hd|sr)[a-z]$'; then
@@ -117,8 +145,7 @@ for dev in $BLOCKS; do
                 setsid /mnt/init.sh
                 FOUND="yes"
                 break
-            fi
-            umount /mnt
+            fi            
         fi
     fi
 done
@@ -133,7 +160,7 @@ ls -lh
 
 rm linuxrc
 
-mkdir -p {bin,sbin,etc,proc,sys,usr/bin,usr/sbin,dev,tmp,var,mnt/cdrom}
+mkdir -p {bin,sbin,etc,proc,sys,usr/bin,usr/sbin,dev,tmp,var,mnt}
 
 cd dev
 
@@ -154,11 +181,15 @@ cd ..
 
 cd src/linux
 make isoimage FDINITRD=../../boot-partition/initramfs.cpio.gz FDARGS="initrd=/initramfs.cpio.gz"
-
-# mv arch/x86/boot/image.iso ../../
-
 cd ../..
 
+qemu-system-x86_64 -cdrom src/linux/arch/x86/boot/image.iso -m 512
+
+
+
+#####################################################
+### init.sh em iso
+#####################################################
 
 cat <<EOF > init.sh
 #!/bin/sh
