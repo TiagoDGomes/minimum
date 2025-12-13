@@ -2,7 +2,7 @@
 
 apt update
 
-apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux isolinux genisoimage dosfstools grub-common xorriso qemu-system-x86
+apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux isolinux genisoimage dosfstools grub-common xorriso qemu-system-x86 xz-utils
 
 mkdir -p mini-linux/boot-partition
 mkdir -p mini-linux/initramfs
