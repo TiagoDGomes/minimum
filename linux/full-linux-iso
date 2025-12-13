@@ -2,7 +2,7 @@
 
 apt update
 
-apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux isolinux genisoimage dosfstools grub-common xorriso qemu-system-x86 xz-utils
+apt install -y bc bison bzip2 cpio flex gcc git make vim libelf-dev libncurses-dev libssl-dev syslinux isolinux genisoimage dosfstools grub-common xorriso grub-pc-bin grub-common qemu-system-x86 xz-utils
 
 mkdir -p mini-linux/boot-partition
 mkdir -p mini-linux/initramfs
@@ -29,6 +29,17 @@ git clone --depth 1 https://github.com/torvalds/linux.git
 cd linux
 
 make defconfig
+
+enable_config "CONFIG_BLK_DEV_INITRD"
+enable_config "CONFIG_DEVTMPFS"
+enable_config "CONFIG_DEVTMPFS_MOUNT"
+enable_config "CONFIG_TMPFS"
+enable_config "CONFIG_PROC_FS"
+enable_config "CONFIG_SYSFS"
+enable_config "CONFIG_TTY"
+enable_config "CONFIG_UNIX98_PTYS"
+enable_config "CONFIG_SERIAL_8250"
+enable_config "CONFIG_SERIAL_8250_CONSOLE"
 
 
 ## suporte a cd-rom (opcional):
@@ -175,21 +186,26 @@ cd ..
 
 
 #####################################################
-### Criar ISO
+### Criar imagem ISO básica
 #####################################################
 
 
 cd src/linux
 make isoimage FDINITRD=../../boot-partition/initramfs.cpio.gz FDARGS="initrd=/initramfs.cpio.gz"
+
 cd ../..
 
-qemu-system-x86_64 -cdrom src/linux/arch/x86/boot/image.iso -m 512
+mv src/linux/arch/x86/boot/image.iso mini-linux-basic.iso
+
+qemu-system-x86_64 -cdrom mini-linux-basic.iso -m 512
 
 
 
 #####################################################
 ### init.sh em iso
 #####################################################
+
+cd boot-partition
 
 cat <<EOF > init.sh
 #!/bin/sh
@@ -198,9 +214,21 @@ EOF
 
 chmod +x init.sh
 
-xorriso -indev src/linux/arch/x86/boot/image.iso -outdev image.iso -map init.sh /init.sh
+mkdir -p boot/grub
 
-qemu-system-x86_64 -cdrom image.iso -m 512
+cat > boot/grub/grub.cfg << EOF
+set timeout=5
+set default=0
+
+menuentry "Mini Linux" {
+    linux /bzImage loglevel=8
+    initrd /initramfs.cpio.gz
+}
+EOF
+
+grub-mkrescue --verbose -o ../mini-linux.iso .
+
+qemu-system-x86_64 -cdrom ../mini-linux.iso -m 512
 
 
 
