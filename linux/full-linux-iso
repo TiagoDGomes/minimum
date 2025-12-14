@@ -220,7 +220,7 @@ chmod +x usr/share/udhcpc/default.script
 cd ..
 
 #####################################################
-### Build initramfs
+### Build initramfs and run
 #####################################################
 
 cd initramfs
@@ -229,9 +229,10 @@ find . -print0 | cpio --null -ov --format=newc | gzip -9 > ../boot-partition/ini
 
 cd ..
 
+qemu-system-x86_64 -kernel boot-partition/bzImage -initrd boot-partition/initramfs.cpio.gz -append "loglevel=8"
 
 #####################################################
-### Criar imagem ISO básica
+### Build basic ISO and run
 #####################################################
 
 
@@ -247,7 +248,7 @@ qemu-system-x86_64 -cdrom mini-linux-basic.iso -m 512
 
 
 #####################################################
-### init.sh em iso
+### Build ISO/Grub and run 
 #####################################################
 
 cd boot-partition
