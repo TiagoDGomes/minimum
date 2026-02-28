@@ -219,6 +219,28 @@ chmod +x usr/share/udhcpc/default.script
 
 cd ..
 
+#####################################################
+### SSH
+#####################################################
+
+cd src
+
+wget https://matt.ucc.asn.au/dropbear/dropbear-2025.89.tar.bz2
+tar -xjf dropbear-2025.89.tar.bz2
+cd dropbear-2025.89
+
+./configure --disable-zlib --enable-static
+make PROGRAMS="dropbear dbclient dropbearkey scp" MULTI=1
+
+mkdir -p ../../initramfs/usr/sbin
+mkdir -p ../../initramfs/usr/bin
+cp dropbearmulti ../../initramfs/usr/sbin/dropbear
+
+ln -s ../../usr/sbin/dropbear ../../initramfs/usr/bin/ssh 
+ln -s ../../usr/sbin/dropbear ../../initramfs/usr/bin/scp
+ln -s ../../usr/sbin/dropbear ../../initramfs/usr/bin/dropbearkey
+
+cd ../..
 
 
 #####################################################
